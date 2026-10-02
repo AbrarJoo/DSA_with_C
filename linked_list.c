@@ -15,17 +15,23 @@ void display(struct node *head){
     }
 }
 
+
+// INSERT AT BEGINNING
+
 void insert_beg(struct node **head){
     struct node *newnode;
 
-    newnode=(struct node*)malloc(sizeof(struct node));
+    newnode = (struct node*)malloc(sizeof(struct node));
 
     printf("enter data at beginning: ");
     scanf("%d",&newnode->data);
 
-    newnode->next=*head;
-    *head=newnode;
+    newnode->next = *head;
+    *head = newnode;
 }
+
+
+// INSERT AT END
 
 void insert_end(struct node *head){
     struct node *newnode, *temp;
@@ -33,7 +39,7 @@ void insert_end(struct node *head){
     newnode = (struct node*)malloc(sizeof(struct node));
 
     printf("enter data at end: ");
-    scanf("%d", &newnode->data);
+    scanf("%d",&newnode->data);
 
     newnode->next = 0;
 
@@ -46,27 +52,46 @@ void insert_end(struct node *head){
     temp->next = newnode;
 }
 
-void insert_position(struct node *head){
+
+// INSERT AT POSITION
+
+void insert_position(struct node **head){
     struct node *newnode, *temp;
     int pos, i;
 
     newnode = (struct node*)malloc(sizeof(struct node));
 
     printf("enter data: ");
-    scanf("%d", &newnode->data);
+    scanf("%d",&newnode->data);
 
     printf("enter position: ");
-    scanf("%d", &pos);
+    scanf("%d",&pos);
 
-    temp = head;
+    // inserting at beginning
+    if(pos == 1){
+        newnode->next = *head;
+        *head = newnode;
+        return;
+    }
 
-    for(i = 1; i < pos - 1; i++){
+    temp = *head;
+
+    for(i = 1; i < pos - 1 && temp != 0; i++){
         temp = temp->next;
+    }
+
+    if(temp == 0){
+        printf("Invalid position!\n");
+        free(newnode);
+        return;
     }
 
     newnode->next = temp->next;
     temp->next = newnode;
 }
+
+
+// DELETE AT BEGINNING
 
 void delete_beg(struct node **head){
     struct node *temp;
@@ -81,16 +106,21 @@ void delete_beg(struct node **head){
     }
 }
 
+
+// DELETE AT END
+
 void delete_end(struct node **head){
-    struct node *prenode,*temp;
+    struct node *prenode, *temp;
 
     if(*head == 0){
         printf("linked list is empty!\n");
     }
+
     else if((*head)->next == 0){
         free(*head);
         *head = 0;
     }
+
     else{
         temp = *head;
 
@@ -104,48 +134,100 @@ void delete_end(struct node **head){
     }
 }
 
-void detele_pos(struct node *head){
-    struct node *nextnode,*temp;
-    int pos,i=1;
-    temp=head;
+
+// DELETE AT POSITION
+
+void delete_pos(struct node **head){
+    struct node *nextnode, *temp;
+    int pos, i = 1;
+
+    if(*head == 0){
+        printf("linked list is empty!\n");
+        return;
+    }
+
     printf("enter position\n");
     scanf("%d",&pos);
 
-    while(i<pos-1){
-        temp=temp->next;
+    // deleting first node
+    if(pos == 1){
+        temp = *head;
+        *head = (*head)->next;
+        free(temp);
+        return;
+    }
+
+    temp = *head;
+
+    while(i < pos - 1 && temp != 0){
+        temp = temp->next;
         i++;
     }
-    nextnode=temp->next;
-    temp->next=nextnode->next;
+
+    if(temp == 0 || temp->next == 0){
+        printf("Invalid position!\n");
+        return;
+    }
+
+    nextnode = temp->next;
+    temp->next = nextnode->next;
     free(nextnode);
 }
+
+
+// REVERSE
+
+void reverse(struct node **head)
+{
+    struct node *previous = 0;
+    struct node *current = *head;
+    struct node *nextNode;
+
+    while(current != 0){
+        nextNode = current->next;
+        current->next = previous;
+
+        previous = current;
+        current = nextNode;
+    }
+
+    *head = previous;
+
+    printf("List reversed\n");
+}
+
+
 void main(){
 
-    struct node *head,*newnode,*temp;
-    head=0;
-    int choice=1;
+    struct node *head, *newnode, *temp;
+    head = 0;
+    int choice = 1;
+
+    // CREATE LINKED LIST
 
     while(choice){
-        newnode=(struct node *)malloc(sizeof(struct node));
+        newnode = (struct node*)malloc(sizeof(struct node));
 
         printf("enter data\n");
         scanf("%d",&newnode->data);
-        newnode->next=0;
 
-        if(head==0){
-            head=newnode;
-            temp=newnode;
+        newnode->next = 0;
+
+        if(head == 0){
+            head = newnode;
+            temp = newnode;
         }
         else{
-            temp->next=newnode;
-            temp=newnode;
+            temp->next = newnode;
+            temp = newnode;
         }
 
         printf("do u want to continue(0/1)");
         scanf("%d",&choice);
     }
 
-     printf("\nOriginal list:\n");
+
+    printf("\nOriginal list:\n");
     display(head);
 
 
@@ -173,10 +255,11 @@ void main(){
 
     printf("\n\n--- Insert at Position ---\n");
 
-    insert_position(head);
+    insert_position(&head);
 
     printf("After insertion:\n");
     display(head);
+
 
     // TEST CASE 4: DELETE AT BEGINNING
 
@@ -202,8 +285,18 @@ void main(){
 
     printf("\n\n--- Delete at Position ---\n");
 
-    detele_pos(head);
+    delete_pos(&head);
 
     printf("After deletion:\n");
+    display(head);
+
+
+    // TEST CASE 7: REVERSE
+
+    printf("\n\n--- Reverse List ---\n");
+
+    reverse(&head);
+
+    printf("After reversal:\n");
     display(head);
 }
