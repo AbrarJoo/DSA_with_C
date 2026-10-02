@@ -68,6 +68,57 @@ void insert_position(struct node *head){
     temp->next = newnode;
 }
 
+void delete_beg(struct node **head){
+    struct node *temp;
+
+    if(*head == 0){
+        printf("linked list is empty!\n");
+    }
+    else{
+        temp = *head;
+        *head = (*head)->next;
+        free(temp);
+    }
+}
+
+void delete_end(struct node **head){
+    struct node *prenode,*temp;
+
+    if(*head == 0){
+        printf("linked list is empty!\n");
+    }
+    else if((*head)->next == 0){
+        free(*head);
+        *head = 0;
+    }
+    else{
+        temp = *head;
+
+        while(temp->next != 0){
+            prenode = temp;
+            temp = temp->next;
+        }
+
+        prenode->next = 0;
+        free(temp);
+    }
+}
+
+void detele_pos(struct node *head){
+    struct node *nextnode,*temp;
+    int pos,i=1;
+    temp=head;
+    printf("enter position\n");
+    scanf("%d",&pos);
+
+    while(i<pos-1){
+        temp=temp->next;
+        i++;
+    }
+    nextnode=temp->next;
+    temp->next=nextnode->next;
+    free(nextnode);
+}
 void main(){
 
     struct node *head,*newnode,*temp;
@@ -125,5 +176,34 @@ void main(){
     insert_position(head);
 
     printf("After insertion:\n");
+    display(head);
+
+    // TEST CASE 4: DELETE AT BEGINNING
+
+    printf("\n\n--- Delete at Beginning ---\n");
+
+    delete_beg(&head);
+
+    printf("After deletion:\n");
+    display(head);
+
+
+    // TEST CASE 5: DELETE AT END
+
+    printf("\n\n--- Delete at End ---\n");
+
+    delete_end(&head);
+
+    printf("After deletion:\n");
+    display(head);
+
+
+    // TEST CASE 6: DELETE AT POSITION
+
+    printf("\n\n--- Delete at Position ---\n");
+
+    detele_pos(head);
+
+    printf("After deletion:\n");
     display(head);
 }
