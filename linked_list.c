@@ -1,11 +1,74 @@
 #include <stdlib.h>
 #include <stdio.h>
-// #define NULL 0
+
+struct node{
+    int data;
+    struct node *next;
+};
+
+void display(struct node *head){
+    struct node *temp = head;
+
+    while(temp != 0){
+        printf("%d\t", temp->data);
+        temp = temp->next;
+    }
+}
+
+void insert_beg(struct node **head){
+    struct node *newnode;
+
+    newnode=(struct node*)malloc(sizeof(struct node));
+
+    printf("enter data at beginning: ");
+    scanf("%d",&newnode->data);
+
+    newnode->next=*head;
+    *head=newnode;
+}
+
+void insert_end(struct node *head){
+    struct node *newnode, *temp;
+
+    newnode = (struct node*)malloc(sizeof(struct node));
+
+    printf("enter data at end: ");
+    scanf("%d", &newnode->data);
+
+    newnode->next = 0;
+
+    temp = head;
+
+    while(temp->next != 0){
+        temp = temp->next;
+    }
+
+    temp->next = newnode;
+}
+
+void insert_position(struct node *head){
+    struct node *newnode, *temp;
+    int pos, i;
+
+    newnode = (struct node*)malloc(sizeof(struct node));
+
+    printf("enter data: ");
+    scanf("%d", &newnode->data);
+
+    printf("enter position: ");
+    scanf("%d", &pos);
+
+    temp = head;
+
+    for(i = 1; i < pos - 1; i++){
+        temp = temp->next;
+    }
+
+    newnode->next = temp->next;
+    temp->next = newnode;
+}
+
 void main(){
-    struct node{
-        int data;
-        struct node *next;
-    };
 
     struct node *head,*newnode,*temp;
     head=0;
@@ -13,6 +76,7 @@ void main(){
 
     while(choice){
         newnode=(struct node *)malloc(sizeof(struct node));
+
         printf("enter data\n");
         scanf("%d",&newnode->data);
         newnode->next=0;
@@ -30,11 +94,36 @@ void main(){
         scanf("%d",&choice);
     }
 
-    //printing
-    temp=head;
-    while(temp!=0){
-        printf("%d\t",temp->data);
-        temp=temp->next;
-    }
+     printf("\nOriginal list:\n");
+    display(head);
 
+
+    // TEST CASE 1: INSERT AT BEGINNING
+
+    printf("\n\n--- Insert at Beginning ---\n");
+
+    insert_beg(&head);
+
+    printf("After insertion:\n");
+    display(head);
+
+
+    // TEST CASE 2: INSERT AT END
+
+    printf("\n\n--- Insert at End ---\n");
+
+    insert_end(head);
+
+    printf("After insertion:\n");
+    display(head);
+
+
+    // TEST CASE 3: INSERT AT POSITION
+
+    printf("\n\n--- Insert at Position ---\n");
+
+    insert_position(head);
+
+    printf("After insertion:\n");
+    display(head);
 }
