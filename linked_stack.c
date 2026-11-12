@@ -1,5 +1,48 @@
-void main(){
+#include <stdio.h>
+#include <stdlib.h>
 
+void push(int);
+void pop();
+void display();
+void peek();
+
+
+int main() {
+
+    printf("\nInitial stack:\n");
+    display();
+
+    printf("\n\nTesting POP on empty stack:\n");
+    pop();
+
+    printf("\n\nTesting PEEK on empty stack:\n");
+    peek();
+
+    printf("\n\nPushing elements:\n");
+    push(10);
+    push(20);
+    push(30);
+
+    printf("\nDisplaying stack:\n");
+    display();
+
+    printf("\n\nTesting PEEK:\n");
+    peek();
+
+    printf("\n\nTesting POP:\n");
+    pop();
+
+    printf("\nDisplaying stack:\n");
+    display();
+
+    printf("\n\nRemoving remaining elements:\n");
+    pop();
+    pop();
+
+    printf("\n\nTesting POP again:\n");
+    pop();
+
+    return 0;
 }
 
 struct node {
